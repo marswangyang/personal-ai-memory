@@ -75,7 +75,14 @@ pnpm build
 # output: build/chrome-mv3-prod/
 ```
 
-> After any code change: click **Reload** on the AI Memory card, then refresh open AI tabs.
+To load the production build in Chrome:
+
+1. Open `chrome://extensions/`
+2. Enable **Developer mode** (top-right)
+3. Click **Load unpacked**
+4. Select `build/chrome-mv3-prod/`
+
+After rebuilding, click **Reload** on the Personal AI Memory extension card and refresh any open AI tabs.
 
 ---
 
@@ -87,6 +94,7 @@ pnpm build
 | **Hybrid search** | Vector (time-decay) + BM25, fused with RRF for best-of-both results |
 | **One-click Recall** | Injects relevant memories as a RAG prompt into ChatGPT, Claude, Gemini, Grok, and Perplexity |
 | **Local backup** | Export / import full backup as JSON (embeddings included) |
+| **History import** | Import conversation exports from ChatGPT, Claude, Gemini, Perplexity, and Grok |
 | **Favourite Prompts** | Save, autocomplete (Trie), organise into drag-and-drop folders |
 | **Floating panel** | Draggable memory panel on every AI site |
 | **8 UI languages** | zh-TW · zh-CN · en · ja · ko · es · fr · de — auto-detected |
@@ -179,7 +187,10 @@ Export via Google Takeout:
 
 ### Perplexity
 
-> Perplexity does **not** support user data export. Each conversation must be visited individually to be captured by the extension.
+1. Sign in and open [Perplexity Account Details](https://www.perplexity.ai/account/details).
+2. Click **Export my data**.
+3. Download and extract the export when it is ready.
+4. The conversation history file is named like `conversations-YYYYMMDD_HHMMSS-xxxxxxxx.json`.
 
 ### Grok
 
@@ -188,6 +199,15 @@ Export via Google Takeout:
 3. Click **Export Account Data**.
 4. Wait several hours for the download link email.
 5. After extracting, the file is `prod-grok-backend.json`.
+
+### Import Provider History into Personal AI Memory
+
+1. Open the Personal AI Memory extension.
+2. Open **Import Backup**.
+3. Choose the provider matching the exported file, such as **Perplexity (conversations.json)**.
+4. Select the extracted JSON file and wait for the import result.
+
+Importing the same provider export again is safe: records with IDs already stored are skipped.
 
 ---
 
@@ -252,6 +272,7 @@ src/
 │   ├── chatgptConversations.ts ChatGPT JSON importer
 │   ├── claudeConversations.ts  Claude JSON importer
 │   ├── geminiTakeout.ts       Gemini Takeout importer
+│   ├── perplexityConversations.ts Perplexity JSON importer
 │   ├── grokConversations.ts   Grok JSON importer
 │   └── index.ts               Importer registry
 ├── tabs/
